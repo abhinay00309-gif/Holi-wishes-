@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Holi - Abhinay Suman</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet"><style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{height:100vh;overflow:hidden;background:#0f0f1a;display:flex;justify-content:center;align-items:center}
+
+/* Reel Style Intro */
+#intro{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+  color:white;
+  font-size:2rem;
+  font-weight:700;
+  animation:fadeOut 2.5s forwards;
+}
+@keyframes fadeOut{
+  0%{opacity:1}
+  80%{opacity:1}
+  100%{opacity:0;visibility:hidden}
+}
+
+/* Smooth Fluid Background */
+body::before{
+  content:"";
+  position:absolute;
+  width:200%;height:200%;
+  background:radial-gradient(circle at 30% 30%,#ff00cc55,transparent 40%),
+             radial-gradient(circle at 70% 40%,#00f2ff55,transparent 40%),
+             radial-gradient(circle at 50% 80%,#39ff1455,transparent 40%);
+  animation:moveBg 20s infinite alternate ease-in-out;
+  filter:blur(70px);
+  z-index:0;
+}
+@keyframes moveBg{0%{transform:translate(-5%,-5%) scale(1)}100%{transform:translate(5%,5%) scale(1.1)}}
+
+canvas{position:absolute;top:0;left:0;z-index:1}
+
+.card{
+  position:relative;z-index:2;width:90%;max-width:600px;padding:45px;border-radius:30px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(35px) saturate(180%);
+  border:1px solid rgba(255,255,255,0.25);
+  box-shadow:0 8px 40px rgba(0,0,0,0.4);
+  text-align:center;
+  animation:slideUp 1.5s ease;
+}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+h1{font-size:2.8rem;font-weight:900;background:linear-gradient(90deg,#ff00cc,#00f2ff,#39ff14,#ffd300);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 25px #ffffffcc}
+
+p{margin-top:20px;font-size:1.1rem;color:white;line-height:1.7}
+
+.wisher{margin-top:15px;font-size:1.3rem;font-weight:700;color:#00f2ff;text-shadow:0 0 20px #00f2ff}
+
+input{margin-top:15px;padding:8px 15px;border-radius:20px;border:none;outline:none}
+
+button{margin-top:15px;padding:10px 20px;border:none;border-radius:30px;font-size:1rem;cursor:pointer;
+  background:linear-gradient(90deg,#ff00cc,#00f2ff);color:white;box-shadow:0 0 25px #ff00cc;transition:0.3s}
+button:hover{transform:scale(1.08)}
+
+</style></head>
+<body><div id="intro">🎨 Loading Holi Magic...</div><audio id="music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
+
+<canvas id="gulal"></canvas>
+
+<div class="card">
+  <h1>🌈 Happy Holi 🌈</h1>
+  <p id="message">
+    Rang sirf chehre par nahi, rooh par bhi lagte hain.
+    Iss Holi aapki zindagi gulal ki tarah udti rahe —
+    Neon sapne aur unlimited khushiyan! ✨🎨
+  </p>
+  <div class="wisher" id="wisher">— From Abhinay Suman</div>  <input type="text" id="nameInput" placeholder="Enter Your Name">
+  <button onclick="setName()">Generate Personal Wish</button>
+  <button onclick="shareWhatsApp()">Share on WhatsApp 📲</button>
+</div><script>
+// Music autoplay on first interaction
+const music=document.getElementById("music");
+document.body.addEventListener("click",()=>{music.play().catch(()=>{})},{once:true});
+
+// Canvas
+const canvas=document.getElementById("gulal");
+const ctx=canvas.getContext("2d");
+function resizeCanvas(){const dpr=window.devicePixelRatio||1;canvas.width=window.innerWidth*dpr;canvas.height=window.innerHeight*dpr;canvas.style.width=window.innerWidth+"px";canvas.style.height=window.innerHeight+"px";ctx.setTransform(dpr,0,0,dpr,0,0)}
+resizeCanvas();window.addEventListener("resize",resizeCanvas);
+
+let particles=[];
+function createGulal(x,y){const colors=["#ff00cc","#00f2ff","#39ff14","#ffd300","#ff073a"];for(let i=0;i<45;i++){particles.push({x,y,size:Math.random()*5+3,color:colors[Math.floor(Math.random()*colors.length)],speedX:(Math.random()-0.5)*4,speedY:(Math.random()-0.5)*4,alpha:1})}}
+function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.forEach((p,i)=>{p.x+=p.speedX;p.y+=p.speedY;p.alpha-=0.02;ctx.globalAlpha=p.alpha;ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();if(p.alpha<=0)particles.splice(i,1)});ctx.globalAlpha=1;requestAnimationFrame(animate)}
+animate();window.addEventListener("click",e=>createGulal(e.clientX,e.clientY));
+
+// Personal Name
+function setName(){const name=document.getElementById("nameInput").value;if(name){document.getElementById("wisher").innerText="— Special Holi Wishes from "+name}}
+
+// WhatsApp Share
+function shareWhatsApp(){const url=window.location.href;const text="🌈 Happy Holi! Check this colorful wish: "+url;window.open("https://wa.me/?text="+encodeURIComponent(text),"_blank")}
+</script></body>
+</html>
